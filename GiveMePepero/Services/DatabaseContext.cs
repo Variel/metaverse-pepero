@@ -26,6 +26,13 @@ namespace GiveMePepero.Services
                 .WithMany(u => u.ReceivedPeperos)
                 .HasForeignKey(p => p.ReceiverId);
 
+            modelBuilder.Entity<Pepero>()
+                .Property(p => p.Year)
+                .HasDefaultValue(2021);
+
+            modelBuilder.Entity<Pepero>()
+                .HasIndex(p => new { p.ReceiverId, p.Year, p.CreatedAt });
+
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -23,6 +23,8 @@ namespace GiveMePepero.Models
         public string ReceiverId { get; set; }
         public PeperoUser Receiver { get; set; }
 
+        public short Year { get; set; }
+
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
     }
 }

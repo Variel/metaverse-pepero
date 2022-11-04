@@ -9,6 +9,7 @@ using GiveMePepero.Models.Response;
 using GiveMePepero.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace GiveMePepero.Controllers
 {
@@ -16,11 +17,13 @@ namespace GiveMePepero.Controllers
     public class UserController : Controller
     {
         private string LogonUserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
+        private readonly short _currentYear;
         private readonly DatabaseContext _database;
 
-        public UserController(DatabaseContext database)
+        public UserController(DatabaseContext database, IConfiguration config)
         {
             _database = database;
+            _currentYear = Int16.Parse(config["CurrentYear"]);
         }
 
         [HttpGet]
@@ -66,7 +69,7 @@ namespace GiveMePepero.Controllers
                 return NotFound();
 
             var peperos = await _database.Peperos
-                .Where(p => p.ReceiverId == userId)
+                .Where(p => p.ReceiverId == userId && p.Year == _currentYear)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToArrayAsync();
             
